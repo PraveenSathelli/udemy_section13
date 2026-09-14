@@ -16,12 +16,21 @@ export class LoginComponent implements OnInit {
 
   constructor() {
     afterNextRender(() => {
+      const savedForm = window.localStorage.getItem("saved-username");
+      if (savedForm) {
+        const loadFormData = JSON.parse(savedForm);
+        const savedEmail = loadFormData.email;
+        setTimeout(() =>{
+        this.form().controls['email'].setValue(savedEmail);
+        })
+      }
+
       const subscription = this.form().valueChanges?.pipe(
         debounceTime(500)
       ).subscribe({
         next: (response) => {
           console.log(response);
-          window.localStorage.setItem('saved-username', JSON.stringify(response));
+          window.localStorage.setItem('saved-username', JSON.stringify({ email: response.email }));
         }
       });
 
