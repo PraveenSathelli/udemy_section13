@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { of } from 'rxjs';
+import { debounceTime, of } from 'rxjs';
 
 function mustContainQuestionMark(control: AbstractControl) {
   if (control.value.includes('?')) {
@@ -23,7 +23,29 @@ function emailIsunique(control: AbstractControl) {
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+  ngOnInit(): void {
+
+    const saverForm = window.localStorage.getItem('saved-login-email');
+
+    if(saverForm)
+    {
+      const loadedForm = JSON.parse(saverForm);
+      this.form.patchValue({
+        email: loadedForm.email
+      })
+    }
+
+
+
+    this.form.controls.email.valueChanges.pipe(
+      debounceTime(500)
+    ).subscribe({
+      next: (value) => {
+        window.localStorage.setItem("saved-login-email", JSON.stringify({ email: value }));
+      }
+    })
+  }
   form = new FormGroup({
     email: new FormControl('', {
       validators: [Validators.required, Validators.email],
