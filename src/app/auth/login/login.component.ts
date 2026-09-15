@@ -16,6 +16,13 @@ function emailIsunique(control: AbstractControl) {
   return of({ notUnique: false });
 }
 
+let initalValue = '';
+const saverForm = window.localStorage.getItem('saved-login-email');
+if (saverForm) {
+  const loadedForm = JSON.parse(saverForm);
+  initalValue = loadedForm.email;
+}
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -26,17 +33,14 @@ function emailIsunique(control: AbstractControl) {
 export class LoginComponent implements OnInit {
   ngOnInit(): void {
 
-    const saverForm = window.localStorage.getItem('saved-login-email');
+    // const saverForm = window.localStorage.getItem('saved-login-email');
 
-    if(saverForm)
-    {
-      const loadedForm = JSON.parse(saverForm);
-      this.form.patchValue({
-        email: loadedForm.email
-      })
-    }
-
-
+    // if (saverForm) {
+    //   const loadedForm = JSON.parse(saverForm);
+    //   this.form.patchValue({
+    //     email: loadedForm.email
+    //   })
+    // }
 
     this.form.controls.email.valueChanges.pipe(
       debounceTime(500)
@@ -47,7 +51,7 @@ export class LoginComponent implements OnInit {
     })
   }
   form = new FormGroup({
-    email: new FormControl('', {
+    email: new FormControl(initalValue, {
       validators: [Validators.required, Validators.email],
       asyncValidators: [(control) => emailIsunique(control)]
 
