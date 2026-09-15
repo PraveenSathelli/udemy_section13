@@ -99,14 +99,14 @@
     </div>
   </div>
 
-  <fieldset formGroupName="address">
+  <fieldset formArrayName="source">
     <legend>How did you find us?</legend>
     <div class="control">
       <input
         type="checkbox"
         id="google"
         name="acquisition"
-        value="google"
+        value="google" formControlName="0"
       />
       <label for="google">Google</label>
     </div>
@@ -116,7 +116,7 @@
         type="checkbox"
         id="friend"
         name="acquisition"
-        value="friend"
+        value="friend" formControlName="1"
       />
       <label for="friend">Referred by friend</label>
     </div>
@@ -126,7 +126,7 @@
         type="checkbox"
         id="other"
         name="acquisition"
-        value="other"
+        value="other" formControlName="2"
       />
       <label for="other">Other</label>
     </div>
